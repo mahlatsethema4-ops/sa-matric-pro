@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SA Matric Pro | SBA + Exam Calculator</title>
+  <meta name="description" content="SA Matric Pro: calculate SA Matric final marks, check Diploma/Bachelor eligibility, and unlock premium features." />
+  <meta name="keywords" content="SA matric calculator, matric final mark, SBA exam calculator, NSC results, diploma bachelor eligibility" />
+  
+  <style>
+    body { font-family: Arial, sans-serif; background:#0f172a; color:#e5e7eb; display:flex; justify-content:center; align-items:center; min-height:100vh; }
+    .card { background:#020617; padding:24px; border-radius:16px; width:100%; max-width:520px; box-shadow:0 20px 40px rgba(0,0,0,.5); }
+    h1 { text-align:center; margin-bottom:8px; font-size:1.5rem; }
+    .brand { text-align:center; opacity:.9; margin-bottom:12px; }
+    label { display:block; margin-top:10px; font-size:.9rem; }
+    select, input { width:100%; padding:10px; margin-top:6px; border-radius:8px; border:none; outline:none; font-size:1rem; }
+    button { width:100%; margin-top:16px; padding:12px; font-size:1rem; border-radius:10px; border:none; cursor:pointer; background:#22c55e; color:#052e16; font-weight:bold; }
+    .secondary { background:#38bdf8; color:#082f49; }
+    .result { margin-top:16px; padding:14px; border-radius:10px; background:#020617; border:1px solid #334155; font-size:.95rem; }
+    .row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .lock { opacity:.5; }
+    footer { text-align:center; font-size:.8rem; opacity:.7; margin-top:12px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🇿🇦 SA Matric Pro</h1>
+    <div class="brand">Smart results. Real answers.</div>
+
+    <label>Select Subject</label>
+    <select id="subject">
+      <option>English Home Language</option>
+      <option>English First Additional Language</option>
+      <option>Afrikaans Home Language</option>
+      <option>Afrikaans First Additional Language</option>
+      <option>Mathematics</option>
+      <option>Mathematical Literacy</option>
+      <option>Life Sciences</option>
+      <option>Physical Sciences</option>
+      <option>Geography</option>
+      <option>History</option>
+      <option>Information Technology</option>
+      <option>Computer Applications Technology</option>
+      <option>Business Studies</option>
+      <option>Economics</option>
+      <option>Accounting</option>
+      <option>Tourism</option>
+      <option>Agricultural Sciences</option>
+      <option>Consumer Studies</option>
+      <option>Hospitality Studies</option>
+      <option>Visual Arts</option>
+      <option>Dramatic Arts</option>
+      <option>Music</option>
+      <option>Dance Studies</option>
+      <option>Religion Studies</option>
+      <option>Engineering Graphics & Design</option>
+    </select>
+
+    <div class="row">
+      <div>
+        <label>SBA (%)</label>
+        <input type="number" id="sba" placeholder="e.g. 45" />
+      </div>
+      <div>
+        <label>Exam (%)</label>
+        <input type="number" id="exam" placeholder="e.g. 60" />
+      </div>
+    </div>
+
+    <button onclick="calculate()">Calculate Final Mark</button>
+    <button class="secondary" onclick="addSubject()">Add Subject to Predictor</button>
+
+    <div id="result" class="result" style="display:none"></div>
+
+    <div id="predictor" class="result lock">
+      <strong>Qualification Predictor (Premium)</strong><br>
+      Add all 7 subjects to unlock Diploma/Bachelor prediction.
+      <br><br>
+      <button onclick="pay()">Unlock Premium with PayFast</button>
+    </div>
+
+    <footer>Web-based Matric Calculator • Works on all devices</footer>
+  </div>
+
+  <script>
+    const subjects = [];
+
+    function calculate() {
+      const sba = parseFloat(document.getElementById('sba').value);
+      const exam = parseFloat(document.getElementById('exam').value);
+      if (isNaN(sba) || isNaN(exam)) { alert('Please enter both marks'); return; }
+      const finalMark = (sba * 0.25) + (exam * 0.75);
+      let status = finalMark >= 50 ? 'PASS ✅' : finalMark >= 40 ? 'SUPPLEMENTARY ⚠️' : 'FAIL ❌';
+      const resultDiv = document.getElementById('result');
+      resultDiv.style.display = 'block';
+      resultDiv.innerHTML = `<strong>Final Mark:</strong> ${finalMark.toFixed(1)}%<br><strong>Status:</strong> ${status}`;
+      window._lastFinal = finalMark;
+    }
+
+    function addSubject() {
+      if (typeof window._lastFinal !== 'number') { alert('Calculate a subject first'); return; }
+      subjects.push(window._lastFinal);
+      if (subjects.length >= 7) {
+        const avg = subjects.reduce((a,b)=>a+b,0)/subjects.length;
+        let q = avg >= 60 ? 'Bachelor Pass 🎓' : avg >= 50 ? 'Diploma Pass 📜' : 'Higher Certificate ⚠️';
+        const p = document.getElementById('predictor');
+        p.classList.remove('lock');
+        p.innerHTML = `<strong>Qualification Prediction</strong><br>Average: ${avg.toFixed(1)}%<br><strong>${q}</strong>`;
+      } else {
+        alert(`Added. ${subjects.length}/7 subjects`);
+      }
+    }
+
+    function pay() {
+      alert('PayFast checkout placeholder. Connect server-side PayFast to unlock premium.');
+    }
+
+    
+  </script>
+</body>
+</html>
